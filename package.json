@@ -1,0 +1,34 @@
+{
+  "name": "safe-courier",
+  "version": "1.0.0",
+  "description": "this is a courier service that helps users deliver their parcels to different destinations",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/priscillahnalubega/safe-courier.git"
+  },
+  "keywords": [
+    "node",
+    "restful",
+    "api"
+  ],
+  "author": "PRISCILLAH-NALUBEGA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/priscillahnalubega/safe-courier/issues"
+  },
+  "homepage": "https://github.com/priscillahnalubega/safe-courier#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
