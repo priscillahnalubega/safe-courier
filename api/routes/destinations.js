@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const { exists } = require("./models/destination");
 
 const Destination = require("./models/destination");
 const Parcel = require("./models/parcel");
@@ -38,11 +37,7 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
   Parcel.findById(req.body.parcelId)
     .then((parcel) => {
-      if (!parcel) {
-        return res.status(404).json({
-          message: "parcel order not found",
-        });
-      }
+      
       const destination = new Destination({
         _id: mongoose.Types.ObjectId(),
         parcel: req.body.parcelId,
@@ -98,5 +93,34 @@ router.post("/", (req, res, next) => {
         });
       })
   });
+
+  //user can change the destination
+  router.patch('/:destinationId', (req,res,next)=>{
+    const id = req.params.destinationId;
+    const updateOps = {};
+    for(const ops of req.body){
+        updateOps[ops.propName]= ops.value;
+    }
+    Parcel.update({_id: id},{$set: updateOps})
+    .exec()
+    .then( result =>{
+        console.log(result);
+        res.status(200).json({
+            message:'Parcel destination has been changed',
+            request:{
+                type:'GET',
+                url:'http://localhost:3000/parcels/'+ id
+            }
+        });
+    })
+   .catch(err =>{
+console.log(err);
+        res.status(500).json({
+          error:err
+  
+        });
+    });
+
+});
 
 module.exports = router;

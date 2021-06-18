@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const parcelSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     name:String,
-    destination:{type:String, required:true},
+    location:{type:String, required:true},
+    user:[{type: mongoose.Schema.Types.ObjectId, ref:'User', required :true}]
     
 });
 

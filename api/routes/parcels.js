@@ -4,10 +4,12 @@ const mongoose = require('mongoose');
 const checkAuth = require('../Auth/check-auth');
 
 const Parcel = require('./models/parcel');
+const user = require('./models/user');
+const User = require('./models/user');
 
 router.get('/',  (req, res, next)=>{
     Parcel.find()
-    .select('name destination _id')
+    .select('name location _id user')
     .exec()
     .then(docs =>{
         const response ={
@@ -15,8 +17,9 @@ router.get('/',  (req, res, next)=>{
             parcels:docs.map(doc=>{
                 return{
                     name:doc.name,
-                    destination:doc.destination,
+                    location:doc.location,
                     _id:doc._id,
+                    user:doc.user,
                     request:{
                         type:"GET",
                         url:'http://localhost:3000/parcels/' + doc._id
@@ -39,7 +42,8 @@ router.post('/',  (req, res, next)=>{
   const parcel = new Parcel({
         _id:new mongoose.Types.ObjectId(),
         name : req.body.name,
-        destination: req.body.destination
+        location: req.body.location,
+        user:doc.user
     });
     // save is a method provided by mongoose to store data, exec turns it into a promise
     parcel.save()
@@ -49,8 +53,9 @@ router.post('/',  (req, res, next)=>{
             message: 'the order has been created',
             createdParcel:{
                 name:result.name,
-                destination:result.destination,
+                location:result.location,
                 _id:result._id,
+                user:user,
                 request:{
                     type:"GET",
                     url:'http://localhost:3000/parcels/' + result._id
@@ -71,7 +76,7 @@ router.post('/',  (req, res, next)=>{
 router.get('/:parcelId',(req,res,next)=>{
     const id = req.params.parcelId;
     Parcel.findById(id)
-    .select('name price _id')
+    .select('name location _id user')
     .exec()
     .then(doc=>{
         console.log("from database",doc);
@@ -104,11 +109,11 @@ router.delete('/:parcelId', (req,res,next)=>{
     .exec()
     .then(result=>{
         res.status(200).json({
-            message:'Parcel has been deleted',
+            message:'Parcel has been cancelled',
             request:{
                 type:'POST',
                 url:'http//localhost:3000/parcels',
-                body:{name:'String',destination:'String'}
+                body:{name:'String',location:'String' }
             }
         });
     })
@@ -120,49 +125,10 @@ router.delete('/:parcelId', (req,res,next)=>{
     });
 
 });
-router.patch('/:parcelId', (req,res,next)=>{
-    const id = req.params.parcelId;
-    const updateOps = {};
-    for(const ops of req.body){
-        updateOps[ops.propName]= ops.value;
-    }
-    Parcel.update({_id: id},{$set: updateOps})
-    .exec()
-    .then( result =>{
-        console.log(result);
-        res.status(200).json({
-            message:'Parcel destination has been changed',
-            request:{
-                type:'GET',
-                url:'http://localhost:3000/parcels/'+ id
-            }
-        });
-    })
-   .catch(err =>{
-console.log(err);
-        res.status(500).json({
-          error:err
-  
-        });
-    });
-
-});
-router.put('/:parcelId', (req,res,next)=>{
-    const id = req.params.parcelId;
-    parcel.cancel({_id: id})
-    .exec()
-    .then(result=>{
-        res.status(200).json(result);
-    })
-    .catch(err=>{
-        console.log(err);
-        res.status(500).json({
-            error:err
-        });
-    });
 
 
-});
+
+
 
 
 module.exports = router;

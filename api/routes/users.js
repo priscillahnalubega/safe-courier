@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const User = require('./models/user')
+const User = require('./models/user');
 
 //handling post requests to / users
 router.post('/signup', (req, res, next)=>{
@@ -91,6 +91,63 @@ bcrypt.compare(req.body.password, user[0].password, (err, result)=>{
 })
 .catch();
 });
+
+// get all users
+router.get('/',  (req, res, next)=>{
+    User.find()
+    .select('_id userName')
+    .exec()
+    .then(docs =>{
+        const response ={
+            count:docs.length,
+            users:docs.map(doc=>{
+                return{
+                    _id:doc._id,
+                    userName:doc.userName,
+                     request:{
+                        type:"GET",
+                        url:'http://localhost:3000/users/' + doc._id
+                    }
+                }
+            })
+        };
+        res.status(200).json(response);
+     })
+    .catch(err =>{
+        console.log(err);
+        res.status(500).json({
+            error:err
+        });
+    });
+});
+
+router.get('/:userId',(req,res,next)=>{
+    const id = req.params.userId;
+    User.findById(id)
+    .select(' _id userName')
+    .exec()
+    .then(doc=>{
+        console.log("from database",doc);
+        if(doc){
+            res.status(200).json({
+                parcel:doc,
+                request:{
+                    type:'GET',
+                    description:'Get all users',
+                    url: 'http://localhost/users'
+                }
+            });
+        }else{
+            res.status(404).json({message:'No valid entry for provided ID'});
+        }
+        
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({error:err});
+    });
+});
+ 
 
 
 // handling delete requests to /users
