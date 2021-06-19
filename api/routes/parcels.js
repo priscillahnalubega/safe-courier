@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
+
 const checkAuth = require('../Auth/check-auth');
 const {authstatus, authCurrent_location}=require ('../middlewares')
 
