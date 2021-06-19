@@ -101,7 +101,7 @@ router.get('/:parcelId',(req,res,next)=>{
     });
 });
  
-router.patch('/:parcelid/status',authStatus([admin]), (req,res,next)=>{
+router.patch('/:parcelid/status', (req,res,next)=>{
     const id = req.params.parcelId;
     const updateOps = {};
     for(const ops of req.body){
