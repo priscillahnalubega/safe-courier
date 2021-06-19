@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const checkAuth = require('../Auth/check-auth');
+const {authstatus, authCurrent_location}=require ('../middlewares')
 
 const Parcel = require('./models/parcel');
 const user = require('./models/user');
@@ -100,6 +101,34 @@ router.get('/:parcelId',(req,res,next)=>{
     });
 });
  
+router.patch('/:parcelid/status',authStatus([admin]), (req,res,next)=>{
+    const id = req.params.parcelId;
+    const updateOps = {};
+    for(const ops of req.body){
+        updateOps[ops.propName]= ops.value;
+    }
+    Parcel.updateOne({_id: id},{$set: updateOps})
+    .exec()
+    .then( result =>{
+        console.log(result);
+        res.status(200).json({
+            message:'Parcel delivery status has been changed',
+            request:{
+                type:'GET',
+                url:'http://localhost:3000/parcels/'+ id
+            }
+        });
+    })
+   .catch(err =>{
+console.log(err);
+        res.status(500).json({
+          error:err
+  
+        });
+    });
+
+});
+
 
 
 

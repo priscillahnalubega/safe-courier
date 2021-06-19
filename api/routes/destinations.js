@@ -109,7 +109,7 @@ router.post("/", (req, res, next) => {
             message:'Parcel destination has been changed',
             request:{
                 type:'GET',
-                url:'http://localhost:3000/parcels/'+ id
+                url:'http://localhost:3000/destinations/'+ id
             }
         });
     })
