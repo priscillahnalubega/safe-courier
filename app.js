@@ -1,16 +1,18 @@
 const http = require('http');
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT
 
-const server = http.createServer(app);
+
 server.listen(port);
+
 
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose =require('mongoose');
+const dotenv = require('dotenv');
 
 //importing the routes
 const parcelRoutes = require('./api/routes/parcels');
@@ -19,11 +21,11 @@ const destinationRoutes =require('./api/routes/destinations');
 
 
 //mongoose is a package that works with the database to store data, fetch data 
-mongoose.connect('process.env.mongodb+srv://restful-app:restful-app@safe-courier.mgeho.mongodb.net/safe-courier?retryWrites=true&w=majority',{
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    }
-)
+//Connect to the db
+mongoose.connect(process.env.DB_CONNECT,
+    { useNewUrlParser: true, useUnifiedTopology: true , useFindAndModify: false},
+     ()=> console.log('connected to db')
+     );
 
 mongoose.Promise =global.Promise;
 
