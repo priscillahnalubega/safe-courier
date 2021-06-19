@@ -1,9 +1,11 @@
 const http = require('http');
+const dotenv = require("dotenv");
 
-//dotenv.config();
+dotenv.config();
 
 
 const port = process.env.PORT
+
 
 
 
