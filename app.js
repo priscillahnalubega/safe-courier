@@ -1,9 +1,12 @@
-const http = require('http');
+const express = require('express');
+const app = express();
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const mongoose =require('mongoose');
+const dotenv = require('dotenv');
 
 
 dotenv.config();
-
-const dotenv = require('dotenv');c
 const port = process.env.PORT
 
 
@@ -12,11 +15,7 @@ const port = process.env.PORT
 
 
 
-const express = require('express');
-const app = express();
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const mongoose =require('mongoose');
+
 
 
 //importing the routes
