@@ -4,7 +4,8 @@ const http = require('http');
 const port = process.env.PORT
 
 
-app.listen(port);
+
+
 
 
 const express = require('express');
@@ -68,6 +69,6 @@ app.use((error, req,res, next)=>{
 
 });
 
-
-
-module.exports = app;
+app.listen(port,()=>{
+    console.log(`Server running`)
+});
