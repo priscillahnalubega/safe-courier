@@ -3,7 +3,7 @@ const http = require('http');
 
 dotenv.config();
 
-
+const dotenv = require('dotenv');c
 const port = process.env.PORT
 
 
@@ -17,7 +17,7 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose =require('mongoose');
-const dotenv = require('dotenv');
+
 
 //importing the routes
 const parcelRoutes = require('./api/routes/parcels');
