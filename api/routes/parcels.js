@@ -7,14 +7,16 @@ const Parcel = require('../models/parcel');
 
 router.get('/',  (req, res, next)=>{
     Parcel.find()
-    .select('name destination _id')
+    .select('createdBy weight pickupLocation destination _id')
     .exec()
     .then(docs =>{
         const response ={
             count:docs.length,
             parcels:docs.map(doc=>{
                 return{
-                    name:doc.name,
+                    createdBy:doc.createdBy,
+                    weight: doc.weight,
+                    pickiupLocation:doc.pickupLocation,
                     destination:doc.destination,
                     _id:doc._id,
                     request:{
@@ -103,7 +105,7 @@ router.get('/:parcelId',(req,res,next)=>{
 router.get('/users/:userId/:parcelId',(req,res,next)=>{
     const id = req.params.parcelId;
     Parcel.findById(id)
-    .select('name  _id')
+    .select('createdBy weight pickupLocation destination  _id')
     .exec()
     .then(doc=>{
         console.log("from database",doc);
@@ -223,34 +225,6 @@ router.put('/:parcelId', (req,res,next)=>{
 
 
 });
-
-router.get('/users/:userid/parcels',(req,res,next)=>{
-    const id = req.params.parcelId;
-    Parcel.findById(id)
-    .select('name destination _id')
-    .exec()
-    .then(doc=>{
-        console.log("from database",doc);
-        if(doc){
-            res.status(200).json({
-                parcel:doc,
-                request:{
-                    type:'GET',
-                    description:'Get all parcels',
-                    url: 'http://localhost/parcels'
-                }
-            });
-        }else{
-            res.status(404).json({message:'No valid entry for provided ID'});
-        }
-        
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({error:err});
-    });
-});
- 
 
 
     

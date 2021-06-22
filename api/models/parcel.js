@@ -5,8 +5,8 @@ const parcelSchema = mongoose.Schema({
     createdOn: new Date(),
     createdBy: String,
     weight: Number,
-    pickupLocation: {Type:String, required:true},
-    destination: {Type:String, required:true},
+    pickupLocation: {type:String, required:true},
+    destination: {type:String, required:true},
     status: String
    
     
