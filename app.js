@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
 const mongoose =require('mongoose');
 const dotenv = require('dotenv');
 
@@ -12,6 +11,7 @@ const port = process.env.PORT
 //importing the routes
 const parcelRoutes = require('./api/routes/parcels');
 const userRoutes = require('./api/routes/users');
+
 
 
 
@@ -43,7 +43,7 @@ app.use((req, res, next)=>{
 //Middleware for handling routes
 app.use('/parcels', parcelRoutes );
 app.use('/users', userRoutes);
-app.use('/api/v1', router);
+//app.use('/api/v1', router);
 
 
 // middleware for handling errors

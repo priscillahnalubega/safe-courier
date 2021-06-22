@@ -12,8 +12,8 @@ const userSchema = mongoose.Schema({
       createdOn: new Date(),
       createdBy: String,
       weight: Number,
-      pickupLocation: {Type:String, required:True},
-      destination: {Type:String, required:True},
+      pickupLocation: {Type:String, required:true},
+      destination: {Type:String, required:true},
       status: String
     
 });

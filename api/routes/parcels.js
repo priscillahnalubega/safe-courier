@@ -35,7 +35,7 @@ router.get('/',  (req, res, next)=>{
 });
 
 
-router.post('api/v1/',  (req, res, next)=>{
+router.post('/',  (req, res, next)=>{
   const parcel = new Parcel({
         _id: new mongoose.Types.ObjectId(),
         createdBy: req.body.createdBy,
@@ -72,10 +72,10 @@ router.post('api/v1/',  (req, res, next)=>{
 });
    
     
-router.get('api/v1/:parcelId',(req,res,next)=>{
+router.get('/:parcelId',(req,res,next)=>{
     const id = req.params.parcelId;
     Parcel.findById(id)
-    .select('name destination _id')
+    .select('createdBy  weight pickupLocation destination _id')
     .exec()
     .then(doc=>{
         console.log("from database",doc);
@@ -100,7 +100,33 @@ router.get('api/v1/:parcelId',(req,res,next)=>{
 });
  
 
-
+router.get('/users/:userId/:parcelId',(req,res,next)=>{
+    const id = req.params.parcelId;
+    Parcel.findById(id)
+    .select('name  _id')
+    .exec()
+    .then(doc=>{
+        console.log("from database",doc);
+        if(doc){
+            res.status(200).json({
+                parcel:doc,
+                request:{
+                    type:'GET',
+                    description:'Get all parcels',
+                    url: 'http://localhost/parcels'
+                }
+            });
+        }else{
+            res.status(404).json({message:'No valid entry for provided ID'});
+        }
+        
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({error:err});
+    });
+});
+ 
 
 router.delete('/:parcelId', (req,res,next)=>{
     const id =req.params.parcelId;
@@ -123,7 +149,37 @@ router.delete('/:parcelId', (req,res,next)=>{
         });
     });
 
+
+
 });
+router.patch('/:parcelId', (req,res,next)=>{
+    const id = req.params.parcelId;
+    const updateOps = {};
+    for(const ops of req.body){
+        updateOps[ops.propName]= ops.value;
+    }
+    Parcel.updateOne({_id: id},{$set: updateOps})
+    .exec()
+    .then( result =>{
+        console.log(result);
+        res.status(200).json({
+            message:'Parcel destination has been changed',
+            request:{
+                type:'GET',
+                url:'http://localhost:3000/parcels/'+ id
+            }
+        });
+    })
+   .catch(err =>{
+console.log(err);
+        res.status(500).json({
+          error:err
+  
+        });
+    });
+
+});
+
 router.patch('/:parcelId', (req,res,next)=>{
     const id = req.params.parcelId;
     const updateOps = {};
